@@ -1,52 +1,45 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri May 24 13:24:38 2024
 
-@author: hep
-"""
-import psycopg2
+import asyncpg
+import asyncio
+import json
+import os
 
-def Get_PG_Info_By_Name(proto_name_list, stage):
-    #print("Get_PG_Info_By_Name", proto_name_list, stage)
-    results = []
-    #print("attempting pull...")
+async def read_db():
+    # Load config from desktop
+    desktop_path = os.path.join(os.path.expanduser("~"), "Desktop", "DBconfig.json")
+    with open(desktop_path, "r") as f:
+        config = json.load(f)
 
-    conn = psycopg2.connect(database="hgcdb",
-                            host="gut.physics.ucsb.edu",
-                            user="postgres",
-                            password="hepuser",
-                            port="5432")
-    
-    cursor = conn.cursor()
-    
-    # Create a placeholder for each name in the list
-    format_strings = ','.join(['%s'] * len(proto_name_list))
-    
-    if stage == 'module':
-        #print("attempting M pull")
-        cursor.execute(f'SELECT module_name, x_offset_mu, y_offset_mu, ang_offset_deg FROM module_inspect WHERE module_name IN ({format_strings})', tuple(proto_name_list))
-    elif stage == 'protomodule':
-        #print("attempting PM pull")
-        cursor.execute(f'SELECT proto_name, x_offset_mu, y_offset_mu, ang_offset_deg FROM proto_inspect WHERE proto_name IN ({format_strings})', tuple(proto_name_list))
-    else:
-        print('ERROR: pg connect did not recive comp_type data')
-    rows = cursor.fetchall()
+    # Connect using loaded config
+    conn = await asyncpg.connect(**config)
 
-    if not rows:
-        results.append(["No data found for the given module names", f"module names: {proto_name_list}"])
-    else:
-        for row in rows:
-            proto_name, x_offset_mu, y_offset_mu, ang_offset_deg = row
-            results.append([proto_name, x_offset_mu, y_offset_mu, ang_offset_deg])
-    
-    cursor.close()
-    conn.close()
-    #except Exception as e:
-        #results.append(["Error", str(e)])
+    # Query the table
+    mod_rows = await conn.fetch('SELECT module_name, x_offset_mu, y_offset_mu, ang_offset_deg FROM module_inspect')
+    pm_rows = await conn.fetch('SELECT proto_name, x_offset_mu, y_offset_mu, ang_offset_deg FROM proto_inspect')
 
-    return results
+    Module_List = []; Proto_List = []; CompiledList = []
+    for row in mod_rows:
+        for rog in pm_rows:
+            #print( row['module_name'][-8:], "vs",  rog['proto_name'][-8:])
+            if row['module_name'][-10:] == rog['proto_name'][-10:]:
+                if not any(sub in row['module_name'][-10:] for sub in ['dum', 'run', 'dry', 'Dry', 'Run']): 
+                    #print( row['module_name'][-10:], "vs",  rog['proto_name'][-10:])
+                    CompiledList.append((
+                        row['module_name'],
+                        row['x_offset_mu'],
+                        row['y_offset_mu'],
+                        row['ang_offset_deg'],
+                        rog['x_offset_mu'],
+                        rog['y_offset_mu'],
+                        rog['ang_offset_deg']
+                    ))
 
-# Example usage
-##result_list = Get_PG_Info_By_Name(['testcomponent_22491104'], 'protomodule')
-#for item in result_list:
-#    print(item)
+
+
+    #for module in CompiledList:
+        #print(module)
+
+    await conn.close()
+
+    return CompiledList
+asyncio.run(read_db())

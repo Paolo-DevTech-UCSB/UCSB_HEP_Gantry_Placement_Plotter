@@ -33,7 +33,7 @@ def make_accuracy_plot(List):
     List_rel_sensor_angle = List[5];
     List_rel_pcb_angle = List[6];
     
-    module_name = 'LDMX Modules'
+    module_name = 'DBModules'
         
         ############################ || ORIENTATION SETTINGS || #######################
     """
@@ -310,7 +310,7 @@ def make_accuracy_plot(List):
 #)
 
 
-if __name__ == "__main__":
+"""if __name__ == "__main__":
 
 
     List_module_name = [
@@ -325,4 +325,4 @@ if __name__ == "__main__":
     List_rel_pcb_angle = [0.076, 0.028, -0.006, -0.004, 0.012, -0.013, 0.016, 0.005]
     
     listA = [List_module_name, List_rel_sensor_X, List_rel_sensor_Y, List_rel_pcb_X, List_rel_pcb_Y, List_rel_sensor_angle, List_rel_pcb_angle]
-    make_accuracy_plot(listA);
+    make_accuracy_plot(listA);"""
