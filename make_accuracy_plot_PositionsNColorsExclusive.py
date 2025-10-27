@@ -23,6 +23,8 @@ from matplotlib.ticker import MultipleLocator
 import matplotlib as mpl
 mpl.use('Agg')
 
+EXTray = '104'
+
 def returncolor(TrayPosition):
     Pos, Tray = TrayPosition
 
@@ -65,7 +67,7 @@ def make_accuracy_plot(List):
     List_rel_pcb_angle = List[6];
     List_Tray_Position = List[7];
     
-    module_name = 'Colored_DB'
+    module_name = 'Tray 104 History'
         
         ############################ || ORIENTATION SETTINGS || #######################
     """
@@ -155,54 +157,55 @@ def make_accuracy_plot(List):
 #    ax.hlines(0, -200, 300, colors='k')
 
     for i in range(len(List_module_name)):
-        
-        rel_sensor_X = List_rel_sensor_X[i] * 1000  #Modified here to have Manual Input
-        rel_sensor_Y = List_rel_sensor_Y[i] * 1000
-        rel_pcb_X    = List_rel_pcb_X[i] * 1000
-        rel_pcb_Y    = List_rel_pcb_Y[i] * 1000
-        
-        rel_sensor_X = List_rel_sensor_X[i] * 1000  #Modified here to have Manual Input
-        rel_sensor_Y = List_rel_sensor_Y[i] * 1000
-        rel_pcb_X    = List_rel_pcb_X[i] * 1000
-        rel_pcb_Y    = List_rel_pcb_Y[i] * 1000
-        
-        limit_func = lambda x: 115. if x > 100. else -115. if x < -100. else x
-        
-        m_rel_sensor_X = limit_func( rel_sensor_X )  
-        m_rel_sensor_Y = limit_func( rel_sensor_Y )
-        m_rel_pcb_X    = limit_func( rel_pcb_X    )
-        m_rel_pcb_Y    = limit_func( rel_pcb_Y    )
-        
-        scolor, hcolor = returncolor(List_Tray_Position[i])
-        
-        ax.plot(m_rel_sensor_X, m_rel_sensor_Y, marker='o', markerfacecolor=scolor, markeredgecolor=scolor, linestyle = 'None', label = 'Sensor w.r.t. Baseplate')
-        ax.plot(m_rel_pcb_X,    m_rel_pcb_Y,    marker='o', markerfacecolor=hcolor, markeredgecolor=hcolor, linestyle = 'None', label = 'PCB w.r.t. Baseplate')
-        
-        #if abs(m_rel_sensor_X) > 100. or abs(m_rel_sensor_Y) > 100.:
-        #    ax.text(m_rel_sensor_X, m_rel_sensor_Y, f'({rel_sensor_X:.0f}, {rel_sensor_Y:.0f})', color='#ff7f0e',
-        #            ha='right' if m_rel_sensor_X < -100. else 'left', va='top' if m_rel_sensor_Y < -100. else 'bottom')
-        #
-        #if abs(m_rel_pcb_X) > 100. or abs(m_rel_pcb_Y) > 100.:
-        #    ax.text(m_rel_pcb_X, m_rel_pcb_Y, f'({rel_pcb_X:.0f}, {rel_pcb_Y:.0f})', color='#2ca02c',
-        #            ha='right' if m_rel_sensor_X < -100. else 'left', va='top' if m_rel_sensor_Y < -100. else 'bottom')
-        
-        
-        
-        ax.plot(np.array([0.]), np.array([0.]), marker='o', markerfacecolor='k', markeredgecolor='k', linestyle = 'None', label = 'Baseplate')
-        
-        
-        plt.tick_params(axis='both', which='minor', direction='in', labelsize=0, length=5, width=1, right=True, top=True)
-        plt.tick_params(axis='both', which='major', direction='in', labelsize=18, length=7, width=1.5, right=True, top=True)
-        
-        
-        # Legend is hardcore 
-        legend_elements = [ Line2D([0], [0], marker='o', color='w', label='Sensor w.r.t. Baseplate', markerfacecolor='#ff7f0e'),
-                            Line2D([0], [0], marker='o', color='w', label='PCB w.r.t. Baseplate',    markerfacecolor='#2ca02c'),
-                            Line2D([0], [0], marker='o', color='w', label='Baseplate',               markerfacecolor='k')
-                            ]
-        
-        ax.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower right', ncol=2, borderaxespad=0., handles=legend_elements)
-        
+        if List_Tray_Position[i][1] == EXTray:
+
+            rel_sensor_X = List_rel_sensor_X[i] * 1000  #Modified here to have Manual Input
+            rel_sensor_Y = List_rel_sensor_Y[i] * 1000
+            rel_pcb_X    = List_rel_pcb_X[i] * 1000
+            rel_pcb_Y    = List_rel_pcb_Y[i] * 1000
+            
+            rel_sensor_X = List_rel_sensor_X[i] * 1000  #Modified here to have Manual Input
+            rel_sensor_Y = List_rel_sensor_Y[i] * 1000
+            rel_pcb_X    = List_rel_pcb_X[i] * 1000
+            rel_pcb_Y    = List_rel_pcb_Y[i] * 1000
+            
+            limit_func = lambda x: 115. if x > 100. else -115. if x < -100. else x
+            
+            m_rel_sensor_X = limit_func( rel_sensor_X )  
+            m_rel_sensor_Y = limit_func( rel_sensor_Y )
+            m_rel_pcb_X    = limit_func( rel_pcb_X    )
+            m_rel_pcb_Y    = limit_func( rel_pcb_Y    )
+            
+            scolor, hcolor = returncolor(List_Tray_Position[i])
+            
+            ax.plot(m_rel_sensor_X, m_rel_sensor_Y, marker='o', markerfacecolor=scolor, markeredgecolor=scolor, linestyle = 'None', label = 'Sensor w.r.t. Baseplate')
+            ax.plot(m_rel_pcb_X,    m_rel_pcb_Y,    marker='o', markerfacecolor=hcolor, markeredgecolor=hcolor, linestyle = 'None', label = 'PCB w.r.t. Baseplate')
+            
+            #if abs(m_rel_sensor_X) > 100. or abs(m_rel_sensor_Y) > 100.:
+            #    ax.text(m_rel_sensor_X, m_rel_sensor_Y, f'({rel_sensor_X:.0f}, {rel_sensor_Y:.0f})', color='#ff7f0e',
+            #            ha='right' if m_rel_sensor_X < -100. else 'left', va='top' if m_rel_sensor_Y < -100. else 'bottom')
+            #
+            #if abs(m_rel_pcb_X) > 100. or abs(m_rel_pcb_Y) > 100.:
+            #    ax.text(m_rel_pcb_X, m_rel_pcb_Y, f'({rel_pcb_X:.0f}, {rel_pcb_Y:.0f})', color='#2ca02c',
+            #            ha='right' if m_rel_sensor_X < -100. else 'left', va='top' if m_rel_sensor_Y < -100. else 'bottom')
+            
+            
+            
+            ax.plot(np.array([0.]), np.array([0.]), marker='o', markerfacecolor='k', markeredgecolor='k', linestyle = 'None', label = 'Baseplate')
+            
+            
+            plt.tick_params(axis='both', which='minor', direction='in', labelsize=0, length=5, width=1, right=True, top=True)
+            plt.tick_params(axis='both', which='major', direction='in', labelsize=18, length=7, width=1.5, right=True, top=True)
+            
+            
+            # Legend is hardcore 
+            legend_elements = [ Line2D([0], [0], marker='o', color='w', label='Sensor w.r.t. Baseplate', markerfacecolor='#ff7f0e'),
+                                Line2D([0], [0], marker='o', color='w', label='PCB w.r.t. Baseplate',    markerfacecolor='#2ca02c'),
+                                Line2D([0], [0], marker='o', color='w', label='Baseplate',               markerfacecolor='k')
+                                ]
+            
+            ax.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc='lower right', ncol=2, borderaxespad=0., handles=legend_elements)
+            
         
     # Outside boundary region  ITS RIGHT HERE 
     ax.fill_between([-125, 125], 100, 125, color='r', alpha=0.05, linewidth=0)
@@ -253,70 +256,70 @@ def make_accuracy_plot(List):
     
     
     for i in range(len(List_module_name)):
-                       
-        rel_sensor_angle = List_rel_sensor_angle[i]  #Modified here to have Manual Input
-        rel_pcb_angle    = List_rel_pcb_angle[i]
-    
-        limit_angle_func = lambda x: orig_gauge_angle_max * 1.1 if x > orig_gauge_angle_max else -orig_gauge_angle_max * 1.1 if x < -orig_gauge_angle_max else x
-        orig_rel_sensor_angle = limit_angle_func(transfer_factor * rel_sensor_angle)
-        orig_rel_pcb_angle    = limit_angle_func(transfer_factor * rel_pcb_angle)
+        if List_Tray_Position[i][1] == EXTray:              
+            rel_sensor_angle = List_rel_sensor_angle[i]  #Modified here to have Manual Input
+            rel_pcb_angle    = List_rel_pcb_angle[i]
         
-        #if abs(orig_rel_sensor_angle) > orig_gauge_angle_max:
-        #    ax_sub.text( orig_rel_sensor_angle * np.pi / 180., 2, f'({rel_sensor_angle:.2f}°)', color='#ff7f0e',
-        #            ha='left' if orig_rel_sensor_angle < -orig_gauge_angle_max else 'right', va='bottom')
-        
-        #if abs(orig_rel_pcb_angle) > orig_gauge_angle_max:
-        #    ax_sub.text( (orig_rel_pcb_angle + (15 if orig_rel_pcb_angle > 0 else -15)) * np.pi / 180., 1.0, f'({rel_pcb_angle:.2f}°)', color='#2ca02c',
-        #            ha='left' if orig_rel_pcb_angle < -orig_gauge_angle_max else 'right', va='bottom')
-        
-        scolor, hcolor = returncolor(List_Tray_Position[i])
+            limit_angle_func = lambda x: orig_gauge_angle_max * 1.1 if x > orig_gauge_angle_max else -orig_gauge_angle_max * 1.1 if x < -orig_gauge_angle_max else x
+            orig_rel_sensor_angle = limit_angle_func(transfer_factor * rel_sensor_angle)
+            orig_rel_pcb_angle    = limit_angle_func(transfer_factor * rel_pcb_angle)
+            
+            #if abs(orig_rel_sensor_angle) > orig_gauge_angle_max:
+            #    ax_sub.text( orig_rel_sensor_angle * np.pi / 180., 2, f'({rel_sensor_angle:.2f}°)', color='#ff7f0e',
+            #            ha='left' if orig_rel_sensor_angle < -orig_gauge_angle_max else 'right', va='bottom')
+            
+            #if abs(orig_rel_pcb_angle) > orig_gauge_angle_max:
+            #    ax_sub.text( (orig_rel_pcb_angle + (15 if orig_rel_pcb_angle > 0 else -15)) * np.pi / 180., 1.0, f'({rel_pcb_angle:.2f}°)', color='#2ca02c',
+            #            ha='left' if orig_rel_pcb_angle < -orig_gauge_angle_max else 'right', va='bottom')
+            
+            scolor, hcolor = returncolor(List_Tray_Position[i])
 
-        ax_sub.annotate('', xy        = (orig_rel_sensor_angle * np.pi / 180., 2),
-                        xytext    = (0., -2.5),
-                        arrowprops= dict(color    =scolor,
-                                         arrowstyle="->"),
-                    )
-        ax_sub.annotate('', xy        = (orig_rel_pcb_angle * np.pi / 180., 1.6),
-                        xytext    = (0., -2.5),
-                        arrowprops= dict(color    =hcolor,
-                                         arrowstyle="->"),
-                    )
-        
-        #    ax_sub.annotate('', xy        = (transfer_factor * 0. * np.pi / 180., 2),
-        #                    xytext    = (0., -2.5),
-        #                    arrowprops= dict(color    ='k',
-        #                                     arrowstyle="->",
-        #                                     ),
-        #                )
-        ax_sub.annotate('', xy        = (transfer_factor * 0.02 * np.pi / 180., 2),
-                        xytext    = (transfer_factor * 0.02 * np.pi / 180., 0.),
-                        arrowprops= dict(color    ='b',
-                                         arrowstyle="-",
-                                         linestyle ="dotted"
-                                         ),
-                    )
-        ax_sub.annotate('', xy        = (transfer_factor * -0.02 * np.pi / 180., 2),
-                        xytext    = (transfer_factor * -0.02 * np.pi / 180., 0.),
-                        arrowprops= dict(color    ='b',
-                                         arrowstyle="-",
-                                         linestyle ="dotted"
-                                         ),
-                    )
-        ax_sub.annotate('', xy        = (transfer_factor * 0.04 * np.pi / 180., 2),
-                        xytext    = (transfer_factor * 0.04 * np.pi / 180., 0.),
-                        arrowprops= dict(color    ='r',
-                                         arrowstyle="-",
-                                         linestyle ="dotted"
-                                         ),
-                    )
-        ax_sub.annotate('', xy        = (transfer_factor * -0.04 * np.pi / 180., 2),
-                        xytext    = (transfer_factor * -0.04 * np.pi / 180., 0.),
-                        arrowprops= dict(color    ='r',
-                                         arrowstyle="-",
-                                         linestyle ="dotted"
-                 
-                                         ),
-                    )
+            ax_sub.annotate('', xy        = (orig_rel_sensor_angle * np.pi / 180., 2),
+                            xytext    = (0., -2.5),
+                            arrowprops= dict(color    =scolor,
+                                            arrowstyle="->"),
+                        )
+            ax_sub.annotate('', xy        = (orig_rel_pcb_angle * np.pi / 180., 1.6),
+                            xytext    = (0., -2.5),
+                            arrowprops= dict(color    =hcolor,
+                                            arrowstyle="->"),
+                        )
+            
+            #    ax_sub.annotate('', xy        = (transfer_factor * 0. * np.pi / 180., 2),
+            #                    xytext    = (0., -2.5),
+            #                    arrowprops= dict(color    ='k',
+            #                                     arrowstyle="->",
+            #                                     ),
+            #                )
+            ax_sub.annotate('', xy        = (transfer_factor * 0.02 * np.pi / 180., 2),
+                            xytext    = (transfer_factor * 0.02 * np.pi / 180., 0.),
+                            arrowprops= dict(color    ='b',
+                                            arrowstyle="-",
+                                            linestyle ="dotted"
+                                            ),
+                        )
+            ax_sub.annotate('', xy        = (transfer_factor * -0.02 * np.pi / 180., 2),
+                            xytext    = (transfer_factor * -0.02 * np.pi / 180., 0.),
+                            arrowprops= dict(color    ='b',
+                                            arrowstyle="-",
+                                            linestyle ="dotted"
+                                            ),
+                        )
+            ax_sub.annotate('', xy        = (transfer_factor * 0.04 * np.pi / 180., 2),
+                            xytext    = (transfer_factor * 0.04 * np.pi / 180., 0.),
+                            arrowprops= dict(color    ='r',
+                                            arrowstyle="-",
+                                            linestyle ="dotted"
+                                            ),
+                        )
+            ax_sub.annotate('', xy        = (transfer_factor * -0.04 * np.pi / 180., 2),
+                            xytext    = (transfer_factor * -0.04 * np.pi / 180., 0.),
+                            arrowprops= dict(color    ='r',
+                                            arrowstyle="-",
+                                            linestyle ="dotted"
+                    
+                                            ),
+                        )
 
 
     # Outside boundary region

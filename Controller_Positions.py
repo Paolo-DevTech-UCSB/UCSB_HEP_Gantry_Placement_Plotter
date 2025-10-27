@@ -1,6 +1,6 @@
 import asyncio
 import numpy as np
-import make_accuracy_plot_PositionsNColors, PGConnect
+import make_accuracy_plot_PositionsNColorsExclusive, PGConnect
 
 async def main():
     List = await PGConnect.read_db_pos()
@@ -38,9 +38,7 @@ async def main():
     listA = [List_module_name[-number:], List_rel_sensor_X[-number:], List_rel_sensor_Y[-number:], List_rel_pcb_X[-number:],
               List_rel_pcb_Y[-number:], List_rel_sensor_angle[-number:], List_rel_pcb_angle[-number:],
                 List_Tray_Position[-number:]]
-    for Name in List_module_name[-number:]:
-        print(Name)
         
-    make_accuracy_plot_PositionsNColors.make_accuracy_plot(listA)
+    make_accuracy_plot_PositionsNColorsExclusive.make_accuracy_plot(listA)
 
 asyncio.run(main())
