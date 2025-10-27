@@ -10,7 +10,7 @@ async def main():
     List_rel_pcb_X = []
     List_rel_pcb_Y = []
     List_rel_pcb_angle = []
-    number = 20
+    number = 100
 
     for Module in List:
         List_module_name.append(Module[0])
