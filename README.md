@@ -5,6 +5,9 @@ Repository serves as the main location for editing the accuracy plot code.
 
 
 1. Hexagonal Acc plot Mod - Make Hexagonal Modification of the Make accuracy plot script (try replacing Red square with red hexagon)
+#this is for -ANDY
+    #    to; ANDY
+        hey andy, You'll need to know that the Yellow-Red Hexagonal Border is 0.64mm wide, and the green-yellow hexagonal border is 0.17mm wide. Your replaceing the red, 100um Rectangle with a 640um wide hexagon. and the little blue rectangle with a 170um wide green hexagon. 
 
 2. Get PGConnect Working / Connect to LocalDB, Pull Info from Module Inspect, Proto Inspect, and Others
     
