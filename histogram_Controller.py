@@ -112,9 +112,6 @@ def plot_xy_with_marginals(
     plt.tight_layout()
     plt.show()
 
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.gridspec import GridSpec
 
 def plot_angle_r_with_marginals(
     angle, x, y,
@@ -228,7 +225,7 @@ async def main():
         List_rel_sensor_angle, List_rel_pcb_angle = List_rel_sensor_angle[-number:], List_rel_pcb_angle[-number:]
 
 
-#    plot_xy_with_marginals(
+#     plot_xy_with_marginals(
 #        List_rel_sensor_X,
 #        List_rel_sensor_Y,
 #        bins=50,
@@ -237,21 +234,21 @@ async def main():
 #        title=f"Shape={ShapeID}, Chip={Chip} (Sensor offsets)"
 #    )
 
-    # plot_xy_with_marginals(
-    #     List_rel_pcb_X,
-    #     List_rel_pcb_Y,
-    #     bins=50,
-    #     xlabel="PCB x_offset (mm)",
-    #     ylabel="PCB y_offset (mm)",
-    #     title=f"Shape={ShapeID}, Chip={Chip} (PCB offsets)"
-    # )
+    plot_xy_with_marginals(
+        List_rel_pcb_X,
+        List_rel_pcb_Y,
+        bins=50,
+        xlabel="PCB x_offset (mm)",
+        ylabel="PCB y_offset (mm)",
+        title=f"Shape={ShapeID}, Chip={Chip} (PCB offsets)"
+    )
 
-    plot_angle_r_with_marginals(
-    List_rel_sensor_X,
-    List_rel_sensor_Y,
-    List_rel_sensor_angle,
-    title=f"Shape={ShapeID} , Chip={Chip} ,Sensor angle offset vs radial displacement",
-)
+#     plot_angle_r_with_marginals(
+#     List_rel_sensor_X,
+#     List_rel_sensor_Y,
+#     List_rel_sensor_angle,
+#     title=f"Shape={ShapeID} , Chip={Chip} ,Sensor angle offset vs radial displacement",
+# )
     
 #     plot_angle_vs_r_distribution(
 #     List_rel_pcb_X, 
