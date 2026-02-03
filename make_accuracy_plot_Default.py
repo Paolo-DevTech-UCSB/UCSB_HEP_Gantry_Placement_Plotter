@@ -15,7 +15,7 @@
 
 # 0.1: Simplified for Use in Jupyter Notebook
 # 0.2: Added an orientation setting
-
+from matplotlib.patches import RegularPolygon
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -101,24 +101,37 @@ def make_accuracy_plot(List):
     #          Offset part          #
     #################################
 
-    ax.set_xlabel('$\Delta x$ [$\mu m$]',  fontsize=18)
-    ax.set_ylabel('$\Delta y$ [$\mu m$]', fontsize=18)
+    ax.set_xlabel(r'$\Delta x$ [$\mu m$]', fontsize=18)
+    ax.set_ylabel(r'$\Delta y$ [$\mu m$]', fontsize=18)
     ax.xaxis.set_major_locator(MultipleLocator(100))
     ax.yaxis.set_major_locator(MultipleLocator(100))
     ax.xaxis.set_minor_locator(MultipleLocator(25))
     ax.yaxis.set_minor_locator(MultipleLocator(25))
-    ax.set_xlim(-200, 300)
-    ax.set_ylim(-200, 300)
+    ax.set_xlim(-300, 300)
+    ax.set_ylim(-300, 300)
+#The following code is for hexagonal boundary lines
+    hex50 = RegularPolygon(
+        (0, 0), numVertices=6, radius=278, orientation=np.pi/6,
+        fill=False, edgecolor='b', linewidth=2
+        )
+
+    ax.add_patch(hex50)
+    ax.text(150, 55,  r'278 $\mu m$',  color='b', fontsize=12)
+
+
+#The following code is for square boundary lines
+    
     ax.vlines(-50, -50, 50, colors='b')
     ax.vlines( 50, -50, 50, colors='b')
     ax.hlines(-50, -50, 50, colors='b')
     ax.hlines( 50, -50, 50, colors='b')
-    ax.text(-50, 55, '50 $\mu m$', color='b', fontsize=12)
+    ax.text(-50, 55, r'50 $\mu m$', color='b', fontsize=12)
     ax.vlines(-100, -100, 100, colors='r')
     ax.vlines( 100, -100, 100, colors='r')
     ax.hlines(-100, -100, 100, colors='r')
     ax.hlines( 100, -100, 100, colors='r')
-    ax.text(-100, 105,'100 $\mu m$', color='r', fontsize=12)
+    ax.text(-100, 105,r'100 $\mu m$', color='r', fontsize=12)
+    
 #    ax.vlines(0, -200, 300, colors='k')
 #    ax.hlines(0, -200, 300, colors='k')
 
@@ -294,8 +307,7 @@ def make_accuracy_plot(List):
     
     #print("Check home folder for Output");
     plt.savefig(f'{module_name}_accuracy.png')  # Save first
-    plt.show()                                  # Then display
-    plt.close()                                 # Finally close
+    plt.show()                                  # Then display                                 # Finally close
 
 
 #make_accuracy_plot(
@@ -310,7 +322,9 @@ def make_accuracy_plot(List):
 #)
 
 
-"""if __name__ == "__main__":
+# when you need to run this file, just uncomment the following lines
+'''
+if __name__ == "__main__":
 
 
     List_module_name = [
@@ -325,4 +339,5 @@ def make_accuracy_plot(List):
     List_rel_pcb_angle = [0.076, 0.028, -0.006, -0.004, 0.012, -0.013, 0.016, 0.005]
     
     listA = [List_module_name, List_rel_sensor_X, List_rel_sensor_Y, List_rel_pcb_X, List_rel_pcb_Y, List_rel_sensor_angle, List_rel_pcb_angle]
-    make_accuracy_plot(listA);"""
+    make_accuracy_plot(listA)
+'''
