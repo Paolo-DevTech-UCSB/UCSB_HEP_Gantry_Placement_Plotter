@@ -15,7 +15,8 @@
 
 # 0.1: Simplified for Use in Jupyter Notebook
 # 0.2: Added an orientation setting
-from matplotlib.patches import RegularPolygon
+from matplotlib.patches import PathPatch, RegularPolygon
+from matplotlib.path import Path
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
@@ -110,15 +111,29 @@ def make_accuracy_plot(List):
     ax.set_xlim(-300, 300)
     ax.set_ylim(-300, 300)
 #The following code is for hexagonal boundary lines
-    hex50 = RegularPolygon(
-        (0, 0), numVertices=6, radius=278, orientation=np.pi/6,
-        fill=False, edgecolor='b', linewidth=2
-        )
 
-    ax.add_patch(hex50)
+    xmin, xmax = ax.get_xlim()
+    ymin, ymax = ax.get_ylim()
+
+    ax.fill_between(
+        [xmin, xmax],
+        ymin, ymax,
+        color='yellow',
+        alpha=0.15,
+        zorder=0
+    )
+
+    hex_cut = RegularPolygon(
+        (0, 0),
+        numVertices=6,
+        radius=278,
+        orientation=np.pi/6,
+        facecolor='white',   # 和 figure 背景一致
+        edgecolor='blue',
+        zorder=1
+    )
     ax.text(150, 55,  r'278 $\mu m$',  color='b', fontsize=12)
-
-
+    ax.add_patch(hex_cut)
 #The following code is for square boundary lines
     
     ax.vlines(-50, -50, 50, colors='b')
